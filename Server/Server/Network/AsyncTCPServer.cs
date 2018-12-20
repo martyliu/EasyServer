@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Runtime.Serialization.Json;
 
-namespace Server.Network
+namespace MobaServer
 {
 
 
@@ -103,13 +104,15 @@ namespace Server.Network
                 byte[] buffer = new byte[recv];
                 Buffer.BlockCopy(state.Buffer, 0, buffer, 0, recv);
 
+                DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(JsonWrapData));
+
                 stream.BeginRead(state.Buffer, 0, state.Buffer.Length, HandleDataReceived, state);
             }
         }
 
         void OnClientConnected(TCPClientState state )
         {
-
+            Console.WriteLine("On client connect! ");
         }
 
         void OnClientDisconnected(TCPClientState state)
@@ -122,5 +125,12 @@ namespace Server.Network
         {
             
         }
+    }
+
+    public class JsonWrapData
+    {
+        public string protocolName;
+        public string jsonData;
+
     }
 }

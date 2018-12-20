@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Server.Network
+namespace MobaServer
 {
     public class TCPClientState
     {

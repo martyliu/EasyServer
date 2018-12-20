@@ -1,9 +1,9 @@
-﻿using Server.Network;
+﻿
 using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace SimpleServer
+namespace MobaServer
 {
     class Program
     {
