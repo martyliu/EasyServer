@@ -1,0 +1,6 @@
+
+\.vs
+\Server\Server\obj\**
+\Server\Server\obj/**/*
+
+Server/Server/obj/Debug/netcoreapp2.1/Server.AssemblyInfo.cs
