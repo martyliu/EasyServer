@@ -1,4 +1,5 @@
-
 \.vs
 Server/Server/obj/**
 Server/Server/obj/**/*
+Server/Server/bin/**
+Server/Server/bin/**/*
