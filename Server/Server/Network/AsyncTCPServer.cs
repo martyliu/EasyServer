@@ -4,6 +4,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Runtime.Serialization.Json;
+using System.Runtime.Serialization;
+using System.IO;
 
 namespace MobaServer
 {
@@ -104,11 +106,40 @@ namespace MobaServer
                 byte[] buffer = new byte[recv];
                 Buffer.BlockCopy(state.Buffer, 0, buffer, 0, recv);
 
-                DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(JsonWrapData));
+                HandleMessage(buffer);
 
                 stream.BeginRead(state.Buffer, 0, state.Buffer.Length, HandleDataReceived, state);
             }
         }
+
+        void HandleMessage(byte[] buffer)
+        {
+            Console.WriteLine("get message");
+            DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(JsonWrapData));
+            JsonWrapData data = deserializer.ReadObject(new MemoryStream(buffer)) as JsonWrapData;
+
+            if(data.protocolName == "moveInput")
+            {
+                //Console.Write(data.jsonData);
+                
+                deserializer = new DataContractJsonSerializer(typeof(Vector2List));
+                var dataBuffer = System.Text.Encoding.Default.GetBytes(data.jsonData);
+                var input = deserializer.ReadObject(new MemoryStream(dataBuffer)) as Vector2List;
+                foreach(var i in input.data)
+                {
+                    Console.WriteLine(i.x + ", " + i.y);
+                }
+
+            }
+        }
+
+        [DataContract]
+        public class Vector2List
+        {
+            [DataMember(Order = 1)]
+            public List<Vector2> data;
+        }
+
 
         void OnClientConnected(TCPClientState state )
         {
@@ -127,9 +158,22 @@ namespace MobaServer
         }
     }
 
+    [DataContract]
+    public class Vector2
+    {
+        [DataMember(Order = 0)]
+        public float x;
+        [DataMember(Order = 1)]
+        public float y;
+    }
+
+
+    [DataContract]
     public class JsonWrapData
     {
+        [DataMember( Order = 0)]
         public string protocolName;
+        [DataMember(Order = 1)]
         public string jsonData;
 
     }
