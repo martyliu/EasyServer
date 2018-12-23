@@ -106,14 +106,23 @@ namespace MobaServer
                 byte[] buffer = new byte[recv];
                 Buffer.BlockCopy(state.Buffer, 0, buffer, 0, recv);
 
-                HandleMessage(buffer);
+                HandleMessage(buffer, state);
 
                 stream.BeginRead(state.Buffer, 0, state.Buffer.Length, HandleDataReceived, state);
             }
         }
 
-        void HandleMessage(byte[] buffer)
+        /// <summary>
+        /// 直接转发，模拟延迟
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="state"></param>
+        void HandleMessage(byte[] buffer, TCPClientState state)
         {
+            state.NetworkStream.Write(buffer, 0, buffer.Length);
+            
+            /*
+
             Console.WriteLine("get message");
             DataContractJsonSerializer deserializer = new DataContractJsonSerializer(typeof(JsonWrapData));
             JsonWrapData data = deserializer.ReadObject(new MemoryStream(buffer)) as JsonWrapData;
@@ -131,6 +140,7 @@ namespace MobaServer
                 }
 
             }
+            */
         }
 
         [DataContract]
