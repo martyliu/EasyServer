@@ -112,6 +112,11 @@ namespace MobaServer
             }
         }
 
+        void SendFinish(IAsyncResult ar)
+        {
+            Console.WriteLine("Send finish");
+        }
+
         /// <summary>
         /// 直接转发，模拟延迟
         /// </summary>
@@ -119,7 +124,8 @@ namespace MobaServer
         /// <param name="state"></param>
         void HandleMessage(byte[] buffer, TCPClientState state)
         {
-            state.NetworkStream.Write(buffer, 0, buffer.Length);
+            //Console.WriteLine("receive mess");
+            state.NetworkStream.BeginWrite(buffer, 0, buffer.Length, SendFinish, state);
             
             /*
 
@@ -142,14 +148,6 @@ namespace MobaServer
             }
             */
         }
-
-        [DataContract]
-        public class Vector2List
-        {
-            [DataMember(Order = 1)]
-            public List<Vector2> data;
-        }
-
 
         void OnClientConnected(TCPClientState state )
         {

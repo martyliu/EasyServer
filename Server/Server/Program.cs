@@ -9,7 +9,6 @@ namespace MobaServer
     {
         static void Main(string[] args)
         {
-
             IPEndPoint ip = new IPEndPoint(IPAddress.Any, 6666);
             AsyncTCPServer server = new AsyncTCPServer(ip);
             server.Start();
